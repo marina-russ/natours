@@ -2,15 +2,14 @@ const fs = require("fs");
 const express = require("express");
 
 const app = express();
-
 app.use(express.json());
 
 const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
 );
 
-// Get Tours Array
-app.get("/api/v1/tours", (req, res) => {
+// Handler Functions
+const getAllTours = (req, res) => {
   res.status(200)
     .json({
       status: "Success!",
@@ -19,10 +18,9 @@ app.get("/api/v1/tours", (req, res) => {
         tours
       }
     });
-});
+};
 
-// Get Tour by ID
-app.get("/api/v1/tours/:id", (req, res) => {
+const getTourByID = (req, res) => {
   console.log(req.params);
   const id = req.params.id * 1;
   const tour = tours.find(el => el.id === id);
@@ -41,10 +39,9 @@ app.get("/api/v1/tours/:id", (req, res) => {
         tour
       }
     });
-});
+};
 
-// Post New Tour
-app.post("/api/v1/tours", (req, res) => {
+const createTour = (req, res) => {
   // console.log(req.body);
   // TODO: check that user is not submitting any malicious code
 
@@ -64,10 +61,9 @@ app.post("/api/v1/tours", (req, res) => {
           }
         });
     });
-})
+};
 
-// Patch Tour
-app.patch("/api/v1/tours/:id", (req, res) => {
+const updateTour = (req, res) => {
   if (req.params.id * 1 > tours.length) {
     return res.status(404).json({
       status: "Fail",
@@ -82,10 +78,9 @@ app.patch("/api/v1/tours/:id", (req, res) => {
         tour: '<Updated tour here>'
       }
     });
-});
+};
 
-// Delete Tour
-app.delete("/api/v1/tours/:id", (req, res) => {
+const deleteTour = (req, res) => {
   if (req.params.id * 1 > tours.length) {
     return res.status(404).json({
       status: "Fail",
@@ -98,7 +93,17 @@ app.delete("/api/v1/tours/:id", (req, res) => {
       status: "success",
       data: null
     });
-});
+}
+
+// Routes
+app.route("/api/v1/tours")
+  .get(getAllTours)
+  .post(createTour);
+
+app.route("/api/v1/tours/:id")
+  .get(getTourByID)
+  .patch(updateTour)
+  .delete(deleteTour);
 
 const port = 3000;
 app.listen(port, () => {
