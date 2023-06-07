@@ -4,6 +4,17 @@ const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
 );
 
+exports.checkID = (req, res, next, val) => {
+  console.log(`Tour ID is ${val}`);
+  if (req.params.id * 1 > tours.length) {
+    return res.status(404).json({
+      status: "Fail",
+      message: "Invalid ID"
+    });
+  };
+  next();
+};
+
 exports.getAllTours = (req, res) => {
   console.log(req.requestTime);
   res.status(200)
@@ -21,13 +32,6 @@ exports.getTourByID = (req, res) => {
   console.log(req.params);
   const id = req.params.id * 1;
   const tour = tours.find(el => el.id === id);
-
-  if (!tour) {
-    return res.status(404).json({
-      status: "Fail",
-      message: "Invalid ID"
-    });
-  };
 
   res.status(200)
     .json({
@@ -61,12 +65,6 @@ exports.createTour = (req, res) => {
 };
 
 exports.updateTour = (req, res) => {
-  if (req.params.id * 1 > tours.length) {
-    return res.status(404).json({
-      status: "Fail",
-      message: "Invalid ID"
-    });
-  };
   // TODO: get tour from JSON, change tour, then save it to the file
   res.status(200)
     .json({
@@ -78,12 +76,6 @@ exports.updateTour = (req, res) => {
 };
 
 exports.deleteTour = (req, res) => {
-  if (req.params.id * 1 > tours.length) {
-    return res.status(404).json({
-      status: "Fail",
-      message: "Invalid ID"
-    });
-  };
   // TODO: delete tour
   res.status(204)
     .json({
