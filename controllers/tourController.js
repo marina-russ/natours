@@ -8,8 +8,18 @@ exports.checkID = (req, res, next, val) => {
   console.log(`Tour ID is ${val}`);
   if (req.params.id * 1 > tours.length) {
     return res.status(404).json({
-      status: "Fail",
+      status: "fail",
       message: "Invalid ID"
+    });
+  };
+  next();
+};
+
+exports.checkBody = (req, res, next) => {
+  if (!req.body.name || !req.body.price) {
+    return res.status(400).json({
+      status: "fail",
+      message: "Either name or price is missing from request body"
     });
   };
   next();
