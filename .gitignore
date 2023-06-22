@@ -2,5 +2,11 @@ node_modules
 build
 npm-debug.log
 .nyc
-.env
 .DS_Store
+
+# config
+.env
+config.env
+
+# CODE NOTES
+refactor-code.md
