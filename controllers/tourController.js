@@ -1,72 +1,104 @@
-const fs = require("fs");
 const Tour = require("./../models/tourModel");
 
-exports.checkBody = (req, res, next) => {
-  if (!req.body.name || !req.body.price) {
-    return res.status(400).json({
+exports.getAllTours = async (req, res) => {
+  try {
+    const tours = await Tour.find();
+
+    res.status(200)
+      .json({
+        status: "success!",
+        results: tours.length,
+        data: {
+          tours
+        }
+      });
+  } catch (err) {
+    res.status(404).json({
       status: "fail",
-      message: "Either name or price is missing from request body"
+      message: err
     });
   };
-  next();
 };
 
-exports.getAllTours = (req, res) => {
-  console.log(req.requestTime);
-  res.status(200)
-    .json({
-      status: "Success!",
-      // results: tours.length,
-      // requestedAt: req.requestTime,
-      // data: {
-      //   tours
-      // }
+exports.getTourById = async (req, res) => {
+  try {
+    const tour = await Tour.findById(req.params.id);
+    // .findById is Mongoose shorthand for:
+    // Tour.findOne({ _id: req.params.id });
+
+    res.status(200)
+      .json({
+        status: "success",
+        data: {
+          tour
+        }
+      });
+  } catch (err) {
+    res.status(404).json({
+      status: "fail",
+      message: err
     });
+  };
 };
 
-exports.getTourByID = (req, res) => {
-  console.log(req.params);
-  const id = req.params.id * 1;
-  // const tour = tours.find(el => el.id === id);
-
-  // res.status(200)
-  //   .json({
-  //     status: "success",
-  //     data: {
-  //       tour
-  //     }
-  //   });
-};
-
-exports.createTour = (req, res) => {
-  // console.log(req.body);
+exports.createTour = async (req, res) => {
   // TODO: check that user is not submitting any malicious code
 
-  res.status(201)
-    .json({
-      status: "success"
-      // , data: {
-      //   tour: newTour
-      // }
+  try {
+    const newTour = await Tour.create(req.body);
+
+    res.status(201)
+      .json({
+        status: "success",
+        data: {
+          tour: newTour
+        }
+      });
+  } catch (err) {
+    res.status(400).json({
+      status: "fail",
+      message: "Invalid data sent!"
     });
+  };
 };
 
-exports.updateTour = (req, res) => {
-  // TODO: get tour from JSON, change tour, then save it to the file
-  res.status(200)
-    .json({
-      status: "success",
-      data: {
-        tour: '<Updated tour here>'
-      }
+exports.updateTour = async (req, res) => {
+  try {
+    const tour = await Tour.findByIdAndUpdate(req.params.id, req.body, {
+      // properties we can set:
+      new: true,
+      runValidators: true
     });
+    res.status(200)
+      .json({
+        status: "success",
+        data: {
+          tour
+        }
+      });
+  } catch (err) {
+    res.status(404)
+      .json({
+        status: "fail",
+        message: err
+      });
+  };
 };
 
-exports.deleteTour = (req, res) => {
-  // TODO: delete tour
-  res.status(204)
-    .json({
-      status: "success",
-      data: null
-    });
+exports.deleteTour = async (req, res) => {
+  try {
+    await Tour.findByIdAndDelete(req.params.id);
+
+    res.status(204)
+      .json({
+        status: "success",
+        data: null
+      });
+  } catch (err) {
+    res.status(404)
+      .json({
+        status: "fail",
+        message: err
+      });
+  };
 };
