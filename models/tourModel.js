@@ -51,6 +51,9 @@ const tourSchema = new mongoose.Schema({
     default: Date.now()
   },
   startDates: [Date]
+}, {
+  strictQuery: true
+  // filter properties not in my schema (such as page, filter, sort) will not be searched
 });
 
 const Tour = mongoose.model("Tour", tourSchema);
