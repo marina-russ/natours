@@ -9,7 +9,8 @@
     "func-names": "off",
     "object-shorthand": "off",
     "no-process-exit": "off",
-    "endOfLine": "auto",
+    "endOfLine": "1",
+    // 0 = off, 1 = warn, 2 = error
     "no-param-reassign": "off",
     "no-return-await": "off",
     "no-underscore-dangle": "off",
