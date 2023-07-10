@@ -53,8 +53,14 @@ const tourSchema = new mongoose.Schema({
   },
   startDates: [Date]
 }, {
+  toJSON: { virtuals: true },
+  toObject: { objects: true },
   strictQuery: true
   // filter properties not in my schema (such as page, filter, sort) will not be searched
+},);
+
+tourSchema.virtual("durationWeeks").get(function () {
+  return this.duration / 7;
 });
 
 const Tour = mongoose.model("Tour", tourSchema);
