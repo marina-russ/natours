@@ -43,11 +43,12 @@ exports.getTourById = catchAsync(async (req, res, next) => {
 
 exports.createTour = catchAsync(async (req, res, next) => {
   // TODO: check that user is not submitting any malicious code
+  const newTour = await Tour.create(req.body);
 
   res.status(201).json({
     status: "success",
     data: {
-      tour: newTour,
+      tour: newTour
     },
   });
 });
