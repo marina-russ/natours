@@ -48,7 +48,7 @@ exports.createTour = catchAsync(async (req, res, next) => {
   res.status(201).json({
     status: "success",
     data: {
-      tour: newTour
+      tour: newTour,
     },
   });
 });
