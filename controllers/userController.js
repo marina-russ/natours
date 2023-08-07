@@ -1,5 +1,5 @@
-const User = require("./../models/userModel");
-const catchAsync = require("./../utils/catchAsync");
+const User = require("../models/userModel");
+const catchAsync = require("../utils/catchAsync");
 
 exports.getAllUsers = (req, res) => {
   res.status(500).json({
