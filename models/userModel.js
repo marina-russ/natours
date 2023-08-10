@@ -54,11 +54,22 @@ const userSchema = new mongoose.Schema({
   },
 });
 
+// Middleware
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
 
+  // Encrypts user password (when signing up)
   this.password = await bcrypt.hash(this.password, 12);
   this.passwordConfirm = undefined;
+  next();
+});
+
+userSchema.pre("save", function (next) {
+  // Ensures that .passwordChangedAt is not added on signup, only on password reset
+  if (!this.isModified("password") || this.isNew) return next();
+
+  // Ensures that iat of JWT (issued at timestamp) is always timestamped AFTER password is changed.
+  this.passwordChangedAt = Date.now() - 1000;
   next();
 });
 
