@@ -52,6 +52,11 @@ const userSchema = new mongoose.Schema({
   passwordResetExpires: {
     type: Date,
   },
+  activeAccount: {
+    type: Boolean,
+    default: true,
+    select: false,
+  },
 });
 
 // Middleware
@@ -70,6 +75,12 @@ userSchema.pre("save", function (next) {
 
   // Ensures that iat of JWT (issued at timestamp) is always timestamped AFTER password is changed.
   this.passwordChangedAt = Date.now() - 1000;
+  next();
+});
+
+userSchema.pre(/^find/, function (next) {
+  // only find User documents with activeAccount: true
+  this.find({ activeAccount: true });
   next();
 });
 
