@@ -29,7 +29,7 @@ exports.getAllTours = catchAsync(async (req, res, next) => {
 });
 
 exports.getTourById = catchAsync(async (req, res, next) => {
-  const tour = await Tour.findById(req.params.id);
+  const tour = await Tour.findById(req.params.id).populate("reviews");
   // .findById is Mongoose shorthand for: Tour.findOne({ _id: req.params.id });
 
   res.status(200).json({
@@ -41,7 +41,6 @@ exports.getTourById = catchAsync(async (req, res, next) => {
 });
 
 exports.createTour = catchAsync(async (req, res, next) => {
-  // TODO: check that user is not submitting any malicious code
   const newTour = await Tour.create(req.body);
 
   res.status(201).json({
