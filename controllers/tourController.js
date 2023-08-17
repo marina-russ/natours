@@ -30,8 +30,7 @@ exports.getAllTours = catchAsync(async (req, res, next) => {
 
 exports.getTourById = catchAsync(async (req, res, next) => {
   const tour = await Tour.findById(req.params.id);
-  // .findById is Mongoose shorthand for:
-  // Tour.findOne({ _id: req.params.id });
+  // .findById is Mongoose shorthand for: Tour.findOne({ _id: req.params.id });
 
   res.status(200).json({
     status: "success",
