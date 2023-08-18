@@ -115,25 +115,37 @@ const tourSchema = new mongoose.Schema(
   }
 );
 
+// =======================
+// === VIRTUALS
+// =======================
+
 // Virtual Fields
+
 tourSchema.virtual("durationWeeks").get(function () {
   return this.duration / 7;
 });
 
 // Virtual Populate
+
 tourSchema.virtual("reviews", {
   ref: "Review",
   foreignField: "tour",
   localField: "_id",
 });
 
+// =======================
+// === MIDDLEWARE
+// =======================
+
 // Document middleware: runs before .save() & .create()
+
 tourSchema.pre("save", function (next) {
   this.slug = slugify(this.name, { lower: true });
   next();
 });
 
 // Query middleware
+
 tourSchema.pre(/^find/, function (next) {
   this.find({ secretTour: { $ne: true } });
   next();
@@ -148,12 +160,16 @@ tourSchema.pre(/^find/, function (next) {
 });
 
 // Aggregation middleware
+
 tourSchema.pre("aggregate", function (next) {
   this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
 
   console.log(this.pipeline());
   next();
 });
+
+// =======================
+// === EXPORTS
 
 const Tour = mongoose.model("Tour", tourSchema);
 

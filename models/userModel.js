@@ -59,7 +59,10 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-// Middleware
+// =======================
+// === MIDDLEWARE
+// =======================
+
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
 
@@ -84,7 +87,10 @@ userSchema.pre(/^find/, function (next) {
   next();
 });
 
-// Instance Methods
+// =======================
+// === INSTANCE METHODS
+// =======================
+
 userSchema.methods.correctPassword = async function (
   candidatePassword,
   userPassword
@@ -121,7 +127,9 @@ userSchema.methods.createPasswordResetToken = function () {
   return resetToken;
 };
 
-// Exports
+// =======================
+// === EXPORTS
+
 const User = mongoose.model("User", userSchema);
 
 module.exports = User;

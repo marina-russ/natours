@@ -35,6 +35,10 @@ const reviewSchema = new mongoose.Schema(
   }
 );
 
+// =======================
+// === MIDDLEWARE
+// =======================
+
 // Query Middleware
 reviewSchema.pre(/^find/, function (next) {
   this.populate({
@@ -43,6 +47,9 @@ reviewSchema.pre(/^find/, function (next) {
   });
   next();
 });
+
+// =======================
+// === EXPORTS
 
 const Review = mongoose.model("Review", reviewSchema);
 

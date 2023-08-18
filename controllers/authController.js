@@ -6,6 +6,10 @@ const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 const sendEmail = require("../utils/email");
 
+// =======================
+// === JSON Web Token
+// =======================
+
 const signToken = (id) =>
   jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
@@ -35,6 +39,10 @@ const createSendToken = (user, statusCode, res) => {
     },
   });
 };
+
+// =======================
+// === Authentication
+// =======================
 
 exports.signup = catchAsync(async (req, res, next) => {
   const newUser = await User.create({
@@ -67,6 +75,10 @@ exports.login = catchAsync(async (req, res, next) => {
   createSendToken(user, 200, res);
   console.log(`🪵  ${user.name} is logged in!`);
 });
+
+// =======================
+// === Authorization
+// =======================
 
 exports.protect = catchAsync(async (req, res, next) => {
   // 1 - Check for & get JWT
@@ -119,6 +131,10 @@ exports.restrictTo = (...roles) => {
     next();
   };
 };
+
+// =======================
+// === Passwords
+// =======================
 
 exports.forgotPassword = catchAsync(async (req, res, next) => {
   // 1 - Get user based on POSTed email
