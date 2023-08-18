@@ -4,6 +4,7 @@ const authController = require("../controllers/authController");
 
 const router = express.Router();
 
+// Authorization Routes
 router.post("/signup", authController.signup);
 router.post("/login", authController.login);
 
@@ -19,6 +20,7 @@ router.patch(
 router.patch("/updateMe", authController.protect, userController.updateMe);
 router.delete("/deleteMe", authController.protect, userController.deleteMe);
 
+// User Routes
 router
   .route("/")
   .get(userController.getAllUsers)
