@@ -65,6 +65,7 @@ exports.login = catchAsync(async (req, res, next) => {
 
   // 3) If both true, send token to client
   createSendToken(user, 200, res);
+  console.log(`🪵  ${user.name} is logged in!`);
 });
 
 exports.protect = catchAsync(async (req, res, next) => {
