@@ -1,6 +1,21 @@
 const Tour = require("../models/tourModel");
-const APIFeatures = require("../utils/apiFeatures");
 const catchAsync = require("../utils/catchAsync");
+const factory = require("./handlerFactory");
+// ! const AppError = require("../utils/appError");
+
+// =======================
+// === CRUD REQUESTS
+// =======================
+
+exports.createTour = factory.createOne(Tour);
+exports.getTour = factory.getOne(Tour, { path: "reviews" });
+exports.getAllTours = factory.getAll(Tour);
+exports.updateTour = factory.updateOne(Tour);
+exports.deleteTour = factory.deleteOne(Tour);
+
+// =======================
+// === OTHER REQUESTS
+// =======================
 
 exports.aliasTopTours = (req, res, next) => {
   req.query.limit = "5";
@@ -9,75 +24,10 @@ exports.aliasTopTours = (req, res, next) => {
   next();
 };
 
-exports.getAllTours = catchAsync(async (req, res, next) => {
-  // * EXECUTE QUERY
-  const features = new APIFeatures(Tour.find(), req.query)
-    .filter()
-    .sort()
-    .limitFields()
-    .paginate();
-  const tours = await features.query;
-
-  // * SEND RESPONSE
-  res.status(200).json({
-    status: "success!",
-    results: tours.length,
-    data: {
-      tours,
-    },
-  });
-});
-
-exports.getTourById = catchAsync(async (req, res, next) => {
-  const tour = await Tour.findById(req.params.id).populate("reviews");
-  // .findById is Mongoose shorthand for: Tour.findOne({ _id: req.params.id });
-
-  res.status(200).json({
-    status: "success",
-    data: {
-      tour,
-    },
-  });
-});
-
-exports.createTour = catchAsync(async (req, res, next) => {
-  const newTour = await Tour.create(req.body);
-
-  res.status(201).json({
-    status: "success",
-    data: {
-      tour: newTour,
-    },
-  });
-});
-
-exports.updateTour = catchAsync(async (req, res, next) => {
-  const tour = await Tour.findByIdAndUpdate(req.params.id, req.body, {
-    // properties we can set:
-    new: true,
-    runValidators: true,
-  });
-  res.status(200).json({
-    status: "success",
-    data: {
-      tour,
-    },
-  });
-});
-
-exports.deleteTour = catchAsync(async (req, res, next) => {
-  await Tour.findByIdAndDelete(req.params.id);
-
-  res.status(204).json({
-    status: "success",
-    data: null,
-  });
-});
-
 exports.getTourStats = catchAsync(async (req, res, next) => {
   const tourStats = await Tour.aggregate([
     {
-      $match: { "ratingsAverage": { $gte: 4.5 } },
+      $match: { ratingsAverage: { $gte: 4.5 } },
     },
     {
       $group: {
