@@ -1,11 +1,14 @@
 const express = require("express");
 const tourController = require("../controllers/tourController");
 const authController = require("../controllers/authController");
+const reviewRouter = require("./reviewRoutes");
 
 const router = express.Router();
 
-//router.param("id", tourController.checkID);
+// Nested Routes
+router.use("/:tourId/reviews", reviewRouter);
 
+// Alias Routes
 router
   .route("/top-5-cheap")
   .get(tourController.aliasTopTours, tourController.getAllTours);
@@ -13,6 +16,7 @@ router
 router.route("/tour-stats").get(tourController.getTourStats);
 router.route("/monthly-plan/:year").get(tourController.getMonthlyPlan);
 
+// Tour Routes
 router
   .route("/")
   .get(authController.protect, tourController.getAllTours)
