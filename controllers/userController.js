@@ -15,13 +15,6 @@ const filterObj = (obj, ...allowedFields) => {
 // === CRUD: ADMIN UPDATING
 // ==========================
 
-exports.getUserByID = (req, res) => {
-  res.status(500).json({
-    status: "error",
-    message: "This route is not yet defined!",
-  });
-};
-
 exports.createUser = (req, res) => {
   // User creation is done in authController at .signup
   res.status(500).json({
@@ -38,6 +31,11 @@ exports.deleteUser = factory.deleteOne(User);
 // ==========================
 // === CRUD: USER UPDATING
 // ==========================
+
+exports.getMe = (req, res, next) => {
+  req.params.id = req.user.id;
+  next();
+};
 
 exports.updateMe = catchAsync(async (req, res, next) => {
   // 1 - Create error if user POSTs password data
