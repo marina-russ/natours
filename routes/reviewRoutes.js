@@ -22,7 +22,11 @@ router
   .route("/:id")
   .get(reviewController.getReview)
   .patch(reviewController.updateReview)
-  .delete(reviewController.deleteReview);
+  .delete(
+    authController.protect,
+    authController.restrictTo("admin"),
+    reviewController.deleteReview
+  );
 
 // =======================
 // EXPORTS
