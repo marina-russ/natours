@@ -1,6 +1,7 @@
 const Review = require("../models/reviewModel");
-//const catchAsync = require("../utils/catchAsync");
+const catchAsync = require("../utils/catchAsync");
 const factory = require("./handlerFactory");
+const AppError = require("../utils/appError");
 
 exports.setTourUserId = (req, res, next) => {
   // Allow for nested routes
@@ -8,6 +9,13 @@ exports.setTourUserId = (req, res, next) => {
   req.body.user = req.user.id;
   next();
 };
+
+exports.checkUserId = catchAsync(async (req, res, next) => {
+  const review = await Review.findById(req.params.id);
+  if (req.user.id !== review.user.id)
+    return next(new AppError("You are not allowed to do that", 401));
+  next();
+});
 
 // =======================
 // CRUD REQUESTS

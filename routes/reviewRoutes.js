@@ -21,7 +21,7 @@ router
 router
   .route("/:id")
   .get(reviewController.getReview)
-  .patch(reviewController.updateReview)
+  .patch(reviewController.checkUserId, reviewController.updateReview)
   .delete(
     authController.protect,
     authController.restrictTo("admin"),
