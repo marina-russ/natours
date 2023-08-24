@@ -1,7 +1,7 @@
 const Tour = require("../models/tourModel");
 const catchAsync = require("../utils/catchAsync");
 const factory = require("./handlerFactory");
-// ! const AppError = require("../utils/appError");
+const AppError = require("../utils/appError");
 
 // =======================
 // === CRUD REQUESTS
@@ -92,6 +92,78 @@ exports.getMonthlyPlan = catchAsync(async (req, res, next) => {
     status: "success",
     data: {
       plan,
+    },
+  });
+});
+
+// GEOSPATIAL REQUESTS
+
+exports.getToursWithin = catchAsync(async (req, res, next) => {
+  const { distance, latlong, unit } = req.params;
+  const [lat, long] = latlong.split(",");
+
+  const radius = unit === "mi" ? distance / 3963.2 : distance / 6378.1;
+
+  if (!lat || !long) {
+    next(
+      new AppError(
+        "Please provide latitude and longitude in the format [lat, long].",
+        400
+      )
+    );
+  }
+
+  const tours = await Tour.find({
+    startLocation: { $geoWithin: { $centerSphere: [[long, lat], radius] } },
+  });
+
+  res.status(200).json({
+    status: "success",
+    results: tours.length,
+    data: {
+      data: tours,
+    },
+  });
+});
+
+exports.getDistances = catchAsync(async (req, res, next) => {
+  const { latlong, unit } = req.params;
+  const [lat, long] = latlong.split(",");
+
+  const multiplier = unit === "mi" ? 0.000621371 : 0.001;
+
+  if (!lat || !long) {
+    next(
+      new AppError(
+        "Please provide latitude and longitude in the format [lat, long].",
+        400
+      )
+    );
+  }
+
+  const tourDistances = await Tour.aggregate([
+    {
+      $geoNear: {
+        near: {
+          type: "Point",
+          coordinates: [long * 1, lat * 1],
+        },
+        distanceField: "distance",
+        distanceMultiplier: multiplier,
+      },
+    },
+    {
+      $project: {
+        distance: 1,
+        name: 1,
+      },
+    },
+  ]);
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      data: tourDistances,
     },
   });
 });
