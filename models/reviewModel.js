@@ -76,12 +76,14 @@ reviewSchema.statics.calcAverageRatings = async function (tourId) {
   }
 };
 
-// Statistics - Part 1/3 for factoring in updated or deleted reviews
+// Statistics - Part 1/2 for factoring in updated or deleted reviews
 // .constructor allows us to point to the current model
 reviewSchema.post("save", function () {
   this.constructor.calcAverageRatings(this.tour);
 });
 
+// Statistics - Part 2/2 for factoring in updated or deleted reviews
+// docs.constructor allows us to directly call our static calcAverageRatings on the model
 reviewSchema.post(/^findOneAnd/, async (docs) => {
   await docs.constructor.calcAverageRatings(docs.tour);
 });
