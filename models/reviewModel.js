@@ -36,6 +36,9 @@ const reviewSchema = new mongoose.Schema(
   }
 );
 
+// Prevents duplicate reviews on a tour by a single user
+reviewSchema.index({ tour: 1, user: 1 }, { unique: true });
+
 // =======================
 // === MIDDLEWARE
 // =======================
