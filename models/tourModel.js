@@ -124,6 +124,7 @@ const tourSchema = new mongoose.Schema(
 
 tourSchema.index({ price: 1, ratingsAverage: -1 });
 tourSchema.index({ slug: 1 });
+tourSchema.index({ startLocation: "2dsphere" });
 
 // Virtual Fields
 
@@ -168,9 +169,14 @@ tourSchema.pre(/^find/, function (next) {
 // Aggregation middleware
 
 tourSchema.pre("aggregate", function (next) {
-  this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
+  const geospatialOperatorTest = /^[$]geo[a-zA-Z]*/;
+  const geoAggregate = this.pipeline().filter(
+    (stage) => Object.keys(stage)[0].search(geospatialOperatorTest) !== -1
+  );
 
-  console.log(this.pipeline());
+  if (geoAggregate.length === 0) {
+    this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
+  }
   next();
 });
 
