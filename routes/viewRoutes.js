@@ -9,6 +9,8 @@ const router = express.Router();
 
 router.get("/", viewController.getOverview);
 router.get("/tour/:slug", viewController.getTour);
+router.get("/signup", viewController.getSignupForm);
+router.get("/login", viewController.getLoginForm);
 
 // =======================
 // EXPORTS

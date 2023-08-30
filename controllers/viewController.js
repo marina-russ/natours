@@ -7,7 +7,7 @@ const catchAsync = require("../utils/catchAsync");
 // === VIEW REQUESTS
 // =======================
 
-exports.getOverview = catchAsync(async (req, res) => {
+exports.getOverview = catchAsync(async (req, res, next) => {
   const tours = await Tour.find();
 
   res.status(200).render("overview", {
@@ -16,7 +16,7 @@ exports.getOverview = catchAsync(async (req, res) => {
   });
 });
 
-exports.getTour = catchAsync(async (req, res) => {
+exports.getTour = catchAsync(async (req, res, next) => {
   const tour = await Tour.findOne({ slug: req.params.slug }).populate({
     path: "reviews",
     fields: "reviewText rating user",
@@ -27,3 +27,16 @@ exports.getTour = catchAsync(async (req, res) => {
     tour,
   });
 });
+
+exports.getSignupForm = (req, res) => {
+  res.status(200).render("signup", {
+    title: "Create an account",
+  });
+};
+
+exports.getLoginForm = (req, res) => {
+  res.status(200).render("login", {
+    title: "Login to your account",
+  });
+};
+
