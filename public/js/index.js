@@ -1,19 +1,19 @@
 /* eslint-disable */
 
-const axios = require("axios");
-
 // =======================
 // === LOGIN
 // =======================
 const loginForm = document.querySelector(".form");
 
 // LOGIN EVENT LISTENER
-loginForm.addEventListener("submit", (e) => {
-  e.preventDefault();
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-  login(email, password);
-});
+if (loginForm) {
+  loginForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    login(email, password);
+  });
+};
 
 // LOGIN FUNCTION
 const login = async (email, password) => {
