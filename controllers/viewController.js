@@ -39,4 +39,3 @@ exports.getLoginForm = (req, res) => {
     title: "Login to your account",
   });
 };
-
