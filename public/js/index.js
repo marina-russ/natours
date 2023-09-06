@@ -4,16 +4,18 @@
 // === LOGIN
 // =======================
 const loginForm = document.querySelector(".form");
+const logoutButton = document.querySelector(".nav__el--logout");
 
-// LOGIN EVENT LISTENER
-if (loginForm) {
+// EVENT LISTENERS
+if (loginForm)
   loginForm.addEventListener("submit", (e) => {
     e.preventDefault();
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
     login(email, password);
   });
-};
+
+if (logoutButton) logoutButton.addEventListener("click", logout);
 
 // HIDE LOGIN ALERT
 const hideAlert = () => {
@@ -37,7 +39,7 @@ const login = async (email, password) => {
       url: "http://127.0.0.1:3000/api/v1/users/login",
       data: {
         email,
-        password
+        password,
       }
     });
 
@@ -52,6 +54,18 @@ const login = async (email, password) => {
   }
 };
 
+// LOGOUT FUNCTION
+const logout = async () => {
+  try {
+    const res = await axios({
+      method: "GET",
+      url: "http://127.0.0.1:3000/api/v1/users/logout",
+    });
+    if (res.data.status = "success") location.reload(true);
+  } catch (err) {
+    showAlert("error", "Error logging out! Try again.");
+  }
+};
 
 // =======================
 // === LEAFLET MAP
