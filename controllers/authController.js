@@ -76,6 +76,12 @@ exports.login = catchAsync(async (req, res, next) => {
   console.log(`🪵  ${user.name} is logged in!`);
 });
 
+// !BUG - Not working correctly
+exports.logout = (req, res) => {
+  res.clearCookie("jwt");
+  res.status(200).json({ status: "success" });
+};
+
 // =======================
 // === Authorization
 // =======================
