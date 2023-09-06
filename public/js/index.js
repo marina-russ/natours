@@ -15,7 +15,8 @@ if (loginForm)
     login(email, password);
   });
 
-if (logoutButton) logoutButton.addEventListener("click", logout);
+// ! BUG - Need to fix
+// if (logoutButton) logoutButton.addEventListener("click", logout);
 
 // HIDE LOGIN ALERT
 const hideAlert = () => {
