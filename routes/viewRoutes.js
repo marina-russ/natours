@@ -8,12 +8,12 @@ const router = express.Router();
 // VIEW ROUTES
 // =======================
 
-router.use(authController.isLoggedIn);
+router.get("/", authController.isLoggedIn, viewController.getOverview);
+router.get("/tour/:slug", authController.isLoggedIn, viewController.getTour);
 
-router.get("/", viewController.getOverview);
-router.get("/tour/:slug", viewController.getTour);
-router.get("/signup", viewController.getSignupForm);
-router.get("/login", viewController.getLoginForm);
+router.get("/signup", authController.isLoggedIn, viewController.getSignupForm);
+router.get("/login", authController.isLoggedIn, viewController.getLoginForm);
+router.get("/me", authController.protect, viewController.getMyAccount);
 
 // =======================
 // EXPORTS
