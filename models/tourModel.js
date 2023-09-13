@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const slugify = require("slugify");
+const uniqueValidator = require("mongoose-unique-validator");
 
 const tourSchema = new mongoose.Schema(
   {
@@ -32,7 +33,6 @@ const tourSchema = new mongoose.Schema(
     ratingsAverage: {
       type: Number,
       default: 4.5,
-      min: [1, "Rating must be 1.0 or higher"],
       max: [5, "Rating must be 5.0 or lower"],
       set: (val) => Math.round(val - 10) / 10,
     },
@@ -115,6 +115,9 @@ const tourSchema = new mongoose.Schema(
     // filter properties not in my schema (such as page, filter, sort) will not be searched
   }
 );
+
+// Will generate errors for duplicate DB issues.
+tourSchema.plugin(uniqueValidator);
 
 // =======================
 // === INDEXES & VIRTUALS
