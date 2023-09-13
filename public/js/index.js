@@ -1,10 +1,16 @@
 /* eslint-disable */
 
 // =======================
-// === LOGIN
+// === DOM ELEMENTS
+const loginForm = document.querySelector(".form--login");
+//const logoutButton = document.querySelector(".nav__el--logout");
+//const userDataForm = document.querySelector(".form-user-data");
+
+const leafletMap = document.getElementById("map");
+
 // =======================
-const loginForm = document.querySelector(".form");
-const logoutButton = document.querySelector(".nav__el--logout");
+// === LOGIN & LOGOUT
+// =======================
 
 // EVENT LISTENERS
 if (loginForm)
@@ -71,8 +77,6 @@ const logout = async () => {
 // =======================
 // === LEAFLET MAP
 // =======================
-
-const leafletMap = document.getElementById("map");
 
 // LEAFLET FUNCTION
 const displayMap = (locations) => {
