@@ -5,13 +5,6 @@ const handleCastErrorDB = (err) => {
   return new AppError(message, 400);
 };
 
-// TODO: Try mongoose-beautiful-unique-validator for E11000 duplication errors.
-// const handleDuplicateFieldsDB = (err) => {
-//   const value = err.errmsg.match(/(["'])(\\?.)*?\1/);
-//   const message = `Duplicate field value: X. Please use another value!`;
-//   return new AppError(message, 400);
-// };
-
 const handleValidationErrorDB = (err) => {
   const errors = Object.values(err.errors).map((el) => el.message);
 
@@ -93,9 +86,6 @@ module.exports = (err, req, res, next) => {
     error = handleJWTError();
     if (error.name === "TokenExpiredError");
     error = handleJWTExpiredError();
-
-    // TODO: Handle duplicate key field error E11000
-    //if (error.code === 11000) error = handleDuplicateFieldsDB(error);
     sendErrorProd(error, req, res);
   }
 };
