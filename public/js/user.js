@@ -1,14 +1,14 @@
 /* eslint-disable */
 
 import axios from 'axios';
-import { showAlert } from './alert.js';
+import { showAlert } from './alert';
 
-export const updateMySettings = async (userData, type) => {
+export const updateMySettings = async (data, type) => {
   try {
-    const urlPass = "http://127.0.0.1:3000/api/v1/users/updateMyPassword";
-    const urlData = "http://127.0.0.1:3000/api/v1/users/updateMe";
     const url =
-      type === "password" ? urlPass : urlData;
+      type === "password"
+        ? "http://127.0.0.1:3000/api/v1/users/updateMyPassword"
+        : "http://127.0.0.1:3000/api/v1/users/updateMe";
 
     const res = await axios({
       method: "PATCH",
@@ -17,9 +17,7 @@ export const updateMySettings = async (userData, type) => {
         'Authorization': '',
         'Content-Type': '',
       },
-      data: {
-        data: userData,
-      },
+      data,
     });
 
     if (res.data.status === "success") {
