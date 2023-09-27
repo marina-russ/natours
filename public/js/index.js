@@ -43,7 +43,7 @@ if (userDataForm)
     e.preventDefault();
     const email = document.getElementById("email").value;
     const password = document.getElementById("password-new").value;
-    updateMySettings({ userName, email }, "userData");
+    updateMySettings({ name, email }, "userData");
   });
 
 if (userPasswordForm)
