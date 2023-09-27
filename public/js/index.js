@@ -46,8 +46,6 @@ if (userDataForm)
     form.append("name", document.getElementById("name").value);
     form.append("email", document.getElementById("email").value);
     form.append("photo", document.getElementById("photo").files[0]);
-    console.log("FORM 📄");
-    console.log(form);
     updateMySettings(form, "data");
   });
 
@@ -57,10 +55,10 @@ if (userPasswordForm)
     document.querySelector(".btn--save-password").textContent = "Updating...";
 
     const passwordCurrent = document.getElementById("password-current").value;
-    const passwordNew = document.getElementById("password-new").value;
-    const passwordNewConfirm = document.getElementById("password-new-confirm").value;
+    const password = document.getElementById("password-new").value;
+    const passwordConfirm = document.getElementById("password-new-confirm").value;
 
-    await updateMySettings({ passwordCurrent, passwordNew, passwordNewConfirm }, "password");
+    await updateMySettings({ passwordCurrent, password, passwordConfirm }, "password");
     document.querySelector(".btn--save-password").textContent = "Save Password";
     // Clears the values typed into the form fields after successful API call:
     document.getElementById("password-current").value = "";
