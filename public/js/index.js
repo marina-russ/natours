@@ -42,8 +42,8 @@ if (userDataForm)
   userDataForm.addEventListener("submit", (e) => {
     e.preventDefault();
     const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-    updateMySettings({ userName, email }, "data");
+    const password = document.getElementById("password-new").value;
+    updateMySettings({ userName, email }, "userData");
   });
 
 if (userPasswordForm)
