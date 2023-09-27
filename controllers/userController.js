@@ -7,7 +7,7 @@ const factory = require("./handlerFactory");
 const AppError = require("../utils/appError");
 
 // ==========================
-// === MULTER - IMAGES
+// === IMAGES
 // ==========================
 
 const multerStorage = multer.memoryStorage();

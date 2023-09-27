@@ -18,16 +18,15 @@ router.patch("/resetPassword/:token", authController.resetPassword);
 
 // =======================
 // LOGGED IN ROUTES
-// =======================
 
-router.use(authController.protect);
 // protects all routes below this middleware
-
-router.patch("/updateMyPassword", authController.updatePassword);
+router.use(authController.protect);
 
 // =======================
 // "ME" ROUTES
 // =======================
+
+router.patch("/updateMyPassword", authController.updatePassword);
 
 router.get("/me", userController.getMe, userController.getUser);
 router.patch(
