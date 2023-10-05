@@ -2,7 +2,8 @@ const path = require("path");
 const express = require("express");
 const morgan = require("morgan");
 const rateLimit = require("express-rate-limit");
-const helmet = require("helmet");
+//const helmet = require("helmet");
+const contentSecurityPolicy = require("helmet-csp");
 const mongoSanitize = require("express-mongo-sanitize");
 const xss = require("xss-clean");
 const hpp = require("hpp");
@@ -13,6 +14,7 @@ const globalErrorHandler = require("./controllers/errorController");
 const tourRouter = require("./routes/tourRoutes");
 const userRouter = require("./routes/userRoutes");
 const reviewRouter = require("./routes/reviewRoutes");
+const bookingRouter = require("./routes/bookingRoutes");
 const viewRouter = require("./routes/viewRoutes");
 
 const app = express();
@@ -20,28 +22,69 @@ const app = express();
 app.set("view engine", "pug");
 app.set("views", path.join(__dirname, "views"));
 
-// =======================
-// === GLOBAL MIDDLEWARE
-// =======================
-
 // Serving static files
 app.use(express.static(path.join(__dirname, "public")));
 
-// Set security HTTP headers
+// =======================
+// === HTTP HEADERS
+// =======================
+const defaultSrcUrls = ["https://js.stripe.com"];
+const scriptSrcUrls = [
+  "https://unpkg.com",
+  "https://tile.openstreetmap.org",
+  "https://cdnjs.cloudflare.com",
+  "https://js.stripe.com",
+];
+const styleSrcUrls = [
+  "https://unpkg.com",
+  "https://tile.openstreetmap.org",
+  "fonts.googleapis.com",
+];
+const connectSrcUrls = [
+  "https://*.stripe.com",
+  "https://unpkg.com",
+  "https://tile.openstreetmap.org",
+  "https://*.cloudflare.com",
+  "http://localhost:3000/api/v1/users/login",
+  "http://localhost/api/v1/bookings/checkout-session/",
+];
+const fontSrcUrls = ["fonts.googleapis.com", "fonts.gstatic.com"];
+const frameSrcUrls = ["https://js.stripe.com"];
+const imgSrcUrls = [
+  "https://*.tile.openstreetmap.org",
+  "https://*.cloudflare.com/",
+  "https://*.stripe.com",
+];
+
 app.use(
-  helmet.contentSecurityPolicy({
-    // Unblocks leaflet, axios, & openstreetmap from Helmet CSP
+  contentSecurityPolicy({
+    useDefaults: true,
     directives: {
-      ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+      "default-src": ["'self'", "data:", "blob:", "ws:", ...defaultSrcUrls],
+      "base-uri": ["'self'"],
       "script-src": [
         "'self'",
-        "https://unpkg.com",
-        "https://cdnjs.cloudflare.com",
+        "'unsafe-inline'",
+        "data",
+        "blob:",
+        ...scriptSrcUrls,
       ],
-      "img-src": ["'self'", "data:", "https://*.tile.openstreetmap.org"],
+      "style-src": ["'self'", "'unsafe-inline'", ...styleSrcUrls],
+      "connect-src": ["'self'", "blob:", "wss:", ...connectSrcUrls],
+      "font-src": ["'self'", "data:", ...fontSrcUrls],
+      "frame-src": ["'self'", ...frameSrcUrls],
+      "img-src": ["'self'", "data:", "blob:", ...imgSrcUrls],
+      "object-src": ["'none'"],
+      "worker-src": ["'self'", "data:", "blob:"],
+      "child-src": ["'self'", "blob:"],
     },
+    reportOnly: false,
   })
 );
+
+// =======================
+// === GLOBAL MIDDLEWARE
+// =======================
 
 // Development logging
 if (process.env.NODE_ENV === "development") {
@@ -98,6 +141,7 @@ app.use("/", viewRouter);
 app.use("/api/v1/tours", tourRouter);
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/reviews", reviewRouter);
+app.use("/api/v1/bookings", bookingRouter);
 
 app.all("*", (req, res, next) => {
   // const err = new Error(`Can't find ${req.originalUrl} on this server!`);
