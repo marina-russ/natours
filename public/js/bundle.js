@@ -2147,7 +2147,7 @@
     if (el)
       el.parentElement.removeChild(el);
   };
-  var showAlert2 = (type, msg) => {
+  var showAlert = (type, msg) => {
     hideAlert();
     const markup = `<div class="alert alert--${type}">${msg}</div>`;
     document.querySelector("body").insertAdjacentHTML("afterbegin", markup);
@@ -2166,13 +2166,13 @@
         }
       });
       if (res.data.status === "success") {
-        showAlert2("Logged in successfully!");
+        showAlert("Logged in successfully!");
         window.setTimeout(() => {
           location.assign("/");
         }, 1500);
       }
     } catch (err) {
-      showAlert2("error", err.response.data.message);
+      showAlert("error", err.response.data.message);
     }
   };
   var logout = async () => {
@@ -2184,27 +2184,37 @@
       if (res.data.status = "success")
         location.replace("/login");
     } catch (err) {
-      showAlert2("error", "Error logging out! Try again.");
+      showAlert("error", "Error logging out! Try again.");
     }
   };
 
   // public/js/user.js
-  var updateMyData = async (name, email) => {
+  var updateMySettings = async (data, type) => {
     try {
+      const url = type === "password" ? "http://127.0.0.1:3000/api/v1/users/updateMyPassword" : "http://127.0.0.1:3000/api/v1/users/updateMe";
       const res = await axios_default({
         method: "PATCH",
-        url: "http://127.0.0.1:3000/api/v1/users/updateMe",
-        data: {
-          name,
-          email
-        }
+        url,
+        headers: {
+          "Authorization": "",
+          "Content-Type": ""
+        },
+        data
       });
       if (res.data.status === "success") {
-        showAlert("success", "Data updated successfully!");
+        showAlert("success", `${type.toUppercase()} updated successfully!`);
       }
     } catch (err) {
+      console.log("Axios Error");
       showAlert("error", err.response.data.message);
     }
+  };
+
+  // public/js/stripe.js
+  var stripe = Stripe("pk_test_51NwoFXLMJZk69QfqT2J2JKmPdA0qnYQuuq1FHkFViUHFPqf2NZE3uiAGDZnJEwMGB5sBioAXskvlOMn9IG2h8u4700kM6SbvSZ");
+  var bookTour = async (tourId) => {
+    const session = await axios_default(`http://127.0.0.1:3000/api/v1/bookings/checkout-session/${tourId}`);
+    console.log(session);
   };
 
   // public/js/index.js
@@ -2212,6 +2222,8 @@
   var loginForm = document.querySelector(".form--login");
   var logoutButton = document.querySelector(".nav__el--logout");
   var userDataForm = document.querySelector(".form-user-data");
+  var userPasswordForm = document.querySelector(".form-user-password");
+  var bookButton = document.getElementById("book-tour");
   if (leafletMap) {
     const locations = JSON.parse(leafletMap.dataset.locations);
     displayMap(locations);
@@ -2228,8 +2240,29 @@
   if (userDataForm)
     userDataForm.addEventListener("submit", (e) => {
       e.preventDefault();
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-      updateMyData(userName, email);
+      const form = new FormData();
+      form.append("name", document.getElementById("name").value);
+      form.append("email", document.getElementById("email").value);
+      form.append("photo", document.getElementById("photo").files[0]);
+      updateMySettings(form, "data");
+    });
+  if (userPasswordForm)
+    userPasswordForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      document.querySelector(".btn--save-password").textContent = "Updating...";
+      const passwordCurrent = document.getElementById("password-current").value;
+      const password = document.getElementById("password-new").value;
+      const passwordConfirm = document.getElementById("password-new-confirm").value;
+      await updateMySettings({ passwordCurrent, password, passwordConfirm }, "password");
+      document.querySelector(".btn--save-password").textContent = "Save Password";
+      document.getElementById("password-current").value = "";
+      document.getElementById("password-new").value = "";
+      document.getElementById("password-new-confirm").value = "";
+    });
+  if (bookButton)
+    bookButton.addEventListener("click", (e) => {
+      e.target.textContent = "Processing...";
+      const { tourId } = e.target.dataset;
+      bookTour(tourId);
     });
 })();
