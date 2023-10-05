@@ -2211,10 +2211,17 @@
   };
 
   // public/js/stripe.js
-  var stripe = Stripe("pk_test_51NwoFXLMJZk69QfqT2J2JKmPdA0qnYQuuq1FHkFViUHFPqf2NZE3uiAGDZnJEwMGB5sBioAXskvlOMn9IG2h8u4700kM6SbvSZ");
   var bookTour = async (tourId) => {
-    const session = await axios_default(`http://127.0.0.1:3000/api/v1/bookings/checkout-session/${tourId}`);
-    console.log(session);
+    const stripe = Stripe("pk_test_51NwoFXLMJZk69QfqT2J2JKmPdA0qnYQuuq1FHkFViUHFPqf2NZE3uiAGDZnJEwMGB5sBioAXskvlOMn9IG2h8u4700kM6SbvSZ");
+    try {
+      const session = await axios_default(`http://127.0.0.1:3000/api/v1/bookings/checkout-session/${tourId}`);
+      await stripe.redirectToCheckout({
+        sessionId: session.data.session.id
+      });
+    } catch (err) {
+      console.log(err);
+      showAlert("error", err);
+    }
   };
 
   // public/js/index.js
@@ -2262,7 +2269,10 @@
   if (bookButton)
     bookButton.addEventListener("click", (e) => {
       e.target.textContent = "Processing...";
+      console.log("\u{1F3AF} Target Dataset 1");
       const { tourId } = e.target.dataset;
+      console.log("\u{1F3AF} Target Dataset 2");
+      console.log(e.target.dataset);
       bookTour(tourId);
     });
 })();

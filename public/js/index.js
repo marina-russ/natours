@@ -1,8 +1,9 @@
 /* eslint-disable */
 
-import { displayMap } from "./leaflet.js";
-import { login, logout } from "./login.js";
-import { updateMySettings } from "./user.js";
+import { displayMap } from "./leaflet";
+import { login, logout } from "./login";
+import { updateMySettings } from "./user";
+import { bookTour } from "./stripe";
 
 // *** DOM ELEMENTS
 // *** =======================
@@ -11,6 +12,7 @@ const loginForm = document.querySelector(".form--login");
 const logoutButton = document.querySelector(".nav__el--logout");
 const userDataForm = document.querySelector(".form-user-data");
 const userPasswordForm = document.querySelector(".form-user-password");
+const bookButton = document.getElementById("book-tour");
 
 // *** LEAFLET MAP
 // *** =======================
@@ -64,4 +66,14 @@ if (userPasswordForm)
     document.getElementById("password-current").value = "";
     document.getElementById("password-new").value = "";
     document.getElementById("password-new-confirm").value = "";
+  });
+
+// *** STRIPE
+// *** =======================
+
+if (bookButton)
+  bookButton.addEventListener("click", (e) => {
+    e.target.textContent = "Processing...";
+    const { tourId } = e.target.dataset;
+    bookTour(tourId);
   });
