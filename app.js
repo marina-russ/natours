@@ -30,19 +30,19 @@ app.use(express.static(path.join(__dirname, "public")));
 // =======================
 const defaultSrcUrls = ["https://js.stripe.com"];
 const scriptSrcUrls = [
-  "https://unpkg.com",
+  "https://unpkg.com/leaflet@1.8.0/dist/",
   "https://tile.openstreetmap.org",
   "https://cdnjs.cloudflare.com",
   "https://js.stripe.com",
 ];
 const styleSrcUrls = [
-  "https://unpkg.com",
+  "https://unpkg.com/leaflet@1.8.0/dist/",
   "https://tile.openstreetmap.org",
   "fonts.googleapis.com",
 ];
 const connectSrcUrls = [
   "https://*.stripe.com",
-  "https://unpkg.com",
+  "https://unpkg.com/leaflet@1.8.0/dist/",
   "https://tile.openstreetmap.org",
   "https://*.cloudflare.com",
   "http://localhost:3000/api/v1/users/login",
