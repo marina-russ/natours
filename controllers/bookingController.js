@@ -1,9 +1,9 @@
 const Stripe = require("stripe");
 
+const Booking = require("../models/bookingModel");
 const Tour = require("../models/tourModel");
-const factory = require("./handlerFactory");
+//const factory = require("./handlerFactory");
 const catchAsync = require("../utils/catchAsync");
-const AppError = require("../utils/appError");
 
 exports.getCheckoutSession = catchAsync(async (req, res, next) => {
   // 1 - Get currently booked tour
@@ -18,6 +18,7 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
         product_data: {
           name: `${tour.name} Tour`,
           description: tour.summary,
+          // TODO - add deployed website URL
           //images: [`https://${DEPLOYED_WEBSITE_URL}/img/tours${tour.imageCover}`],
         },
       },
@@ -29,7 +30,10 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
 
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ["card"],
-    success_url: `${req.protocol}://${req.get("host")}/`,
+    // TODO - change from URL query to Stripe Webhooks once website is deployed!!
+    // TODO - cont, success_url is not currently secure!!
+    // eslint-disable-next-line prettier/prettier
+    success_url: `${req.protocol}://${req.get("host")}/?tour=${req.params.tourId}&user=${req.user.id}&price=${tour.price}`,
     cancel_url: `${req.protocol}://${req.get("host")}/tour/${tour.slug}`,
     customer_email: req.user.email,
     client_reference_id: req.params.tourId,
@@ -42,4 +46,14 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
     status: "success",
     session,
   });
+});
+
+exports.createBookingCheckout = catchAsync(async (req, res, next) => {
+  // TODO - Temporary code since this is unsecure! Only until app is deployed!
+  const { tour, user, price } = req.query;
+
+  if (!tour || !user || !price) return next();
+  await Booking.create({ tour, user, price });
+
+  res.redirect(req.originalUrl.split("?")[0]);
 });
