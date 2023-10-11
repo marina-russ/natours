@@ -2,7 +2,7 @@ const Stripe = require("stripe");
 
 const Booking = require("../models/bookingModel");
 const Tour = require("../models/tourModel");
-//const factory = require("./handlerFactory");
+const factory = require("./handlerFactory");
 const catchAsync = require("../utils/catchAsync");
 
 exports.getCheckoutSession = catchAsync(async (req, res, next) => {
@@ -57,3 +57,19 @@ exports.createBookingCheckout = catchAsync(async (req, res, next) => {
 
   res.redirect(req.originalUrl.split("?")[0]);
 });
+
+// =======================
+// CRUD REQUESTS
+// =======================
+
+exports.createReview = factory.createOne(Review);
+exports.getReview = factory.getOne(Review);
+exports.getAllReviews = factory.getAll(Review);
+exports.updateReview = factory.updateOne(Review);
+exports.deleteReview = factory.deleteOne(Review);
+
+exports.createTour = factory.createOne(Tour);
+exports.getTour = factory.getOne(Tour, { path: "reviews" });
+exports.getAllTours = factory.getAll(Tour);
+exports.updateTour = factory.updateOne(Tour);
+exports.deleteTour = factory.deleteOne(Tour);
