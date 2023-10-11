@@ -20,6 +20,7 @@ router.get("/tour/:slug", authController.isLoggedIn, viewController.getTour);
 router.get("/signup", authController.isLoggedIn, viewController.getSignupForm);
 router.get("/login", authController.isLoggedIn, viewController.getLoginForm);
 router.get("/me", authController.protect, viewController.getMyAccount);
+router.get("/my-tours", authController.protect, viewController.getMyTours);
 
 // =======================
 // EXPORTS
