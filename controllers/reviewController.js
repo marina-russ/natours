@@ -3,6 +3,10 @@ const factory = require("./handlerFactory");
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 
+// =======================
+// MIDDLEWARE
+// =======================
+
 exports.setTourUserId = (req, res, next) => {
   // Allow for nested routes
   if (!req.body.tour) req.body.tour = req.params.tourId;

@@ -6,8 +6,18 @@ const factory = require("./handlerFactory");
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 
+// =======================
+// === CRUD REQUESTS
+// =======================
+
+exports.createTour = factory.createOne(Tour);
+exports.getTour = factory.getOne(Tour, { path: "reviews" });
+exports.getAllTours = factory.getAll(Tour);
+exports.updateTour = factory.updateOne(Tour);
+exports.deleteTour = factory.deleteOne(Tour);
+
 // ==========================
-// === IMAGES
+// === IMAGE MIDDLEWARE
 // ==========================
 
 const multerStorage = multer.memoryStorage();
@@ -62,18 +72,82 @@ exports.resizeTourImages = catchAsync(async (req, res, next) => {
   next();
 });
 
-// =======================
-// === CRUD REQUESTS
-// =======================
+// ==========================
+// === GEOSPATIAL MIDDLEWARE
+// ==========================
 
-exports.createTour = factory.createOne(Tour);
-exports.getTour = factory.getOne(Tour, { path: "reviews" });
-exports.getAllTours = factory.getAll(Tour);
-exports.updateTour = factory.updateOne(Tour);
-exports.deleteTour = factory.deleteOne(Tour);
+exports.getToursWithin = catchAsync(async (req, res, next) => {
+  const { distance, latlong, unit } = req.params;
+  const [lat, long] = latlong.split(",");
+
+  const radius = unit === "mi" ? distance / 3963.2 : distance / 6378.1;
+
+  if (!lat || !long) {
+    next(
+      new AppError(
+        "Please provide latitude and longitude in the format [lat, long].",
+        400
+      )
+    );
+  }
+
+  const tours = await Tour.find({
+    startLocation: { $geoWithin: { $centerSphere: [[long, lat], radius] } },
+  });
+
+  res.status(200).json({
+    status: "success",
+    results: tours.length,
+    data: {
+      data: tours,
+    },
+  });
+});
+
+exports.getDistances = catchAsync(async (req, res, next) => {
+  const { latlong, unit } = req.params;
+  const [lat, long] = latlong.split(",");
+
+  const multiplier = unit === "mi" ? 0.000621371 : 0.001;
+
+  if (!lat || !long) {
+    next(
+      new AppError(
+        "Please provide latitude and longitude in the format [lat, long].",
+        400
+      )
+    );
+  }
+
+  const tourDistances = await Tour.aggregate([
+    {
+      $geoNear: {
+        near: {
+          type: "Point",
+          coordinates: [long * 1, lat * 1],
+        },
+        distanceField: "distance",
+        distanceMultiplier: multiplier,
+      },
+    },
+    {
+      $project: {
+        distance: 1,
+        name: 1,
+      },
+    },
+  ]);
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      data: tourDistances,
+    },
+  });
+});
 
 // =======================
-// === OTHER REQUESTS
+// === OTHER MIDDLEWARE
 // =======================
 
 exports.aliasTopTours = (req, res, next) => {
@@ -155,74 +229,4 @@ exports.getMonthlyPlan = catchAsync(async (req, res, next) => {
   });
 });
 
-// GEOSPATIAL REQUESTS
 
-exports.getToursWithin = catchAsync(async (req, res, next) => {
-  const { distance, latlong, unit } = req.params;
-  const [lat, long] = latlong.split(",");
-
-  const radius = unit === "mi" ? distance / 3963.2 : distance / 6378.1;
-
-  if (!lat || !long) {
-    next(
-      new AppError(
-        "Please provide latitude and longitude in the format [lat, long].",
-        400
-      )
-    );
-  }
-
-  const tours = await Tour.find({
-    startLocation: { $geoWithin: { $centerSphere: [[long, lat], radius] } },
-  });
-
-  res.status(200).json({
-    status: "success",
-    results: tours.length,
-    data: {
-      data: tours,
-    },
-  });
-});
-
-exports.getDistances = catchAsync(async (req, res, next) => {
-  const { latlong, unit } = req.params;
-  const [lat, long] = latlong.split(",");
-
-  const multiplier = unit === "mi" ? 0.000621371 : 0.001;
-
-  if (!lat || !long) {
-    next(
-      new AppError(
-        "Please provide latitude and longitude in the format [lat, long].",
-        400
-      )
-    );
-  }
-
-  const tourDistances = await Tour.aggregate([
-    {
-      $geoNear: {
-        near: {
-          type: "Point",
-          coordinates: [long * 1, lat * 1],
-        },
-        distanceField: "distance",
-        distanceMultiplier: multiplier,
-      },
-    },
-    {
-      $project: {
-        distance: 1,
-        name: 1,
-      },
-    },
-  ]);
-
-  res.status(200).json({
-    status: "success",
-    data: {
-      data: tourDistances,
-    },
-  });
-});
