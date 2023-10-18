@@ -9,6 +9,7 @@ npm-debug.log
 # bundling
 build
 public/js/bundle.js
+.cache/
 
 # CODE NOTES
 refactor-code.md
