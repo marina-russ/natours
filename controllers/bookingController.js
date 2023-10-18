@@ -62,14 +62,8 @@ exports.createBookingCheckout = catchAsync(async (req, res, next) => {
 // CRUD REQUESTS
 // =======================
 
-exports.createReview = factory.createOne(Review);
-exports.getReview = factory.getOne(Review);
-exports.getAllReviews = factory.getAll(Review);
-exports.updateReview = factory.updateOne(Review);
-exports.deleteReview = factory.deleteOne(Review);
-
-exports.createTour = factory.createOne(Tour);
-exports.getTour = factory.getOne(Tour, { path: "reviews" });
-exports.getAllTours = factory.getAll(Tour);
-exports.updateTour = factory.updateOne(Tour);
-exports.deleteTour = factory.deleteOne(Tour);
+exports.createBooking = factory.createOne(Booking);
+exports.getBooking = factory.getOne(Booking);
+exports.getAllBookings = factory.getAll(Booking);
+exports.updateBooking = factory.updateOne(Booking);
+exports.deleteBooking = factory.deleteOne(Booking);
