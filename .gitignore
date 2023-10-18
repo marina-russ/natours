@@ -5,8 +5,7 @@ npm-debug.log
 .DS_Store
 
 # config
-.env
-config.env
+*.env
 
 # CODE NOTES
 refactor-code.md
