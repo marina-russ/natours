@@ -22,7 +22,8 @@ Tech Stack:
 - Express
 - MongoDB
 - Mongoose
-  [![My Skills](https://skillicons.dev/icons?i=nodejs,express,mongodb)](https://skillicons.dev)
+
+[![My Skills](https://skillicons.dev/icons?i=nodejs,express,mongodb)](https://skillicons.dev)
 
 Libraries:
 
@@ -44,8 +45,10 @@ Specific to Development:
 #### Areas for Potential Future Development
 
 ✅ Allow user data to be updated
+
 ✅ Ability to process payments using Stripe
 
+- Compress bundled JavaScript files. Find a package with CLI utility, hopefully.
 - Customize Leaflet map appearance
 - Replace the scroll bar in Review section of Tour Details page with a nicer UI (potentially (SwiperJS)[https://swiperjs.com/swiper-api])
 - Refresh account page when updating user data, or show an alert advising user to refresh page.
