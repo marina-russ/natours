@@ -46,6 +46,7 @@ const connectSrcUrls = [
   "https://unpkg.com/leaflet@1.8.0/dist/",
   "https://tile.openstreetmap.org",
   "https://*.cloudflare.com",
+  //TODO: update localhost URLs below:
   "http://localhost:3000/api/v1/users/login",
   "http://localhost/api/v1/bookings/checkout-session/",
 ];
