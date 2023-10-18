@@ -28,6 +28,7 @@ const sendErrorDev = (err, req, res) => {
     });
   }
   // -- RENDERED WEBSITE
+  console.error("💥 ERROR 💥", err);
   return res.status(err.statusCode).render("errorTemplate", {
     title: "Something went wrong!",
     msg: err.message,
@@ -45,7 +46,7 @@ const sendErrorProd = (err, req, res) => {
       });
     }
     // B) Programming or unknown errors: don't leak error details
-    console.error(" 💥 ERROR 💥", err);
+    console.error("💥 ERROR 💥", err);
     res.status(500).json({
       status: "error",
       message: "Something went wrong!",
@@ -55,14 +56,13 @@ const sendErrorProd = (err, req, res) => {
   // -- RENDERED WEBSITE
   // A) Operational errors: send message to client
   if (err.isOperational) {
-    console.log(err);
     return res.status(err.statusCode).render("errorTemplate", {
       title: "Something went wrong!",
       msg: err.message,
     });
   }
   // B) Programming or unknown errors: don't leak error details
-  console.error(" 💥 ERROR 💥", err);
+  console.error("💥 ERROR 💥", err);
   return res.status(500).render("errorTemplate", {
     title: "Something went wrong!",
     msg: "Please try again later.",

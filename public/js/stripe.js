@@ -16,7 +16,7 @@ export const bookTour = async tourId => {
     });
 
   } catch (err) {
-    console.log(err);
+    console.log("Stripe error");
     showAlert("error", err);
   }
 };

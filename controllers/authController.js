@@ -54,7 +54,7 @@ exports.signup = catchAsync(async (req, res, next) => {
     role: "user",
   });
   const url = `${req.protocol}://${req.get("host")}/me`;
-  console.log(url);
+  //console.log(url);
   await new Email(newUser, url).sendWelcome();
 
   createSendToken(newUser, 201, res);
@@ -78,7 +78,7 @@ exports.login = catchAsync(async (req, res, next) => {
 
   // 3) If both true, send token to client
   createSendToken(user, 200, res);
-  console.log(`🪵  ${user.name} is logged in!`);
+  //console.log(`🪵  ${user.name} is logged in!`);
 });
 
 // !BUG - Not working correctly
