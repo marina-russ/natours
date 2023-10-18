@@ -1,11 +1,14 @@
 node_modules
-build
 npm-debug.log
 .nyc
 .DS_Store
 
 # config
 *.env
+
+# bundling
+build
+public/js/bundle.js
 
 # CODE NOTES
 refactor-code.md
