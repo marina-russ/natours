@@ -1,24 +1,27 @@
-const path = require("path");
-const express = require("express");
-const morgan = require("morgan");
-const rateLimit = require("express-rate-limit");
-//const helmet = require("helmet");
-const contentSecurityPolicy = require("helmet-csp");
-const mongoSanitize = require("express-mongo-sanitize");
-const xss = require("xss-clean");
-const hpp = require("hpp");
-const cookieParser = require("cookie-parser");
-const compression = require("compression");
+import path from "path";
+import express from "express";
+import morgan from "morgan";
+import { fileURLToPath } from "url";
+import rateLimit from "express-rate-limit";
+//import helmet from "helmet";
+import contentSecurityPolicy from "helmet-csp";
+import mongoSanitize from "express-mongo-sanitize";
+import xss from "xss-clean";
+import hpp from "hpp";
+import cookieParser from "cookie-parser";
+import compression from "compression";
 
-const AppError = require("./utils/appError");
-const globalErrorHandler = require("./controllers/errorController");
-const tourRouter = require("./routes/tourRoutes");
-const userRouter = require("./routes/userRoutes");
-const reviewRouter = require("./routes/reviewRoutes");
-const bookingRouter = require("./routes/bookingRoutes");
-const viewRouter = require("./routes/viewRoutes");
+//import AppError from "/utils/appError.js";
+import * as globalErrorHandler from "./controllers/errorController.js";
+import * as tourRouter from "./routes/tourRoutes.js";
+import * as userRouter from "./routes/userRoutes.js";
+import * as reviewRouter from "./routes/reviewRoutes.js";
+import * as bookingRouter from "./routes/bookingRoutes.js";
+import * as viewRouter from "./routes/viewRoutes.js";
 
 const app = express();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 app.set("view engine", "pug");
 app.set("views", path.join(__dirname, "views"));
@@ -161,4 +164,4 @@ app.use(globalErrorHandler);
 // =======================
 // === START SERVER
 
-module.exports = app;
+export default app;
