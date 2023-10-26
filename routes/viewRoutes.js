@@ -1,7 +1,8 @@
-const express = require("express");
-const viewController = require("../controllers/viewController");
-const authController = require("../controllers/authController");
-const bookingController = require("../controllers/bookingController");
+import express from "express";
+
+import * as viewController from "../controllers/viewController.js";
+import * as authController from "../controllers/authController.js";
+import * as bookingController from "../controllers/bookingController.js";
 
 const router = express.Router();
 
@@ -25,4 +26,4 @@ router.get("/my-tours", authController.protect, viewController.getMyTours);
 // =======================
 // EXPORTS
 
-module.exports = router;
+export default router;

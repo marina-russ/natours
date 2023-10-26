@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
-const slugify = require("slugify");
-const uniqueValidator = require("mongoose-unique-validator");
+import mongoose from "mongoose";
+import slugify from "slugify";
+import uniqueValidator from "mongoose-unique-validator";
 
 const tourSchema = new mongoose.Schema(
   {
@@ -188,4 +188,4 @@ tourSchema.pre("aggregate", function (next) {
 
 const Tour = mongoose.model("Tour", tourSchema);
 
-module.exports = Tour;
+export default Tour;

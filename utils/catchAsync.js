@@ -1,3 +1,4 @@
-module.exports = (fn) => (req, res, next) => {
+export default (fn) => (req, res, next) => {
   fn(req, res, next).catch((err) => next(err));
+  console.log("catchAsync");
 };

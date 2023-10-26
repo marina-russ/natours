@@ -1,7 +1,8 @@
-const express = require("express");
-const tourController = require("../controllers/tourController");
-const authController = require("../controllers/authController");
-const reviewRouter = require("./reviewRoutes");
+import express from "express";
+
+import * as tourController from "../controllers/tourController.js";
+import * as authController from "../controllers/authController.js";
+import * as reviewRouter from "./reviewRoutes.js";
 
 const router = express.Router();
 
@@ -46,6 +47,7 @@ router
 router.route("/distances/:latlong/unit/:unit").get(tourController.getDistances);
 
 // Nested Routes
+// TODO lacks a middleware?
 router.use("/:tourId/reviews", reviewRouter);
 
 // Alias Routes
@@ -65,4 +67,4 @@ router
 // =======================
 // EXPORTS
 
-module.exports = router;
+//export default router;

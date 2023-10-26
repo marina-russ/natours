@@ -1,9 +1,10 @@
-const nodemailer = require("nodemailer");
-const pug = require("pug");
-const htmlToText = require("html-to-text");
-//const Transport = require("nodemailer-brevo-transport");
+import nodemailer from "nodemailer";
+import pug from "pug";
+//import htmlToText from "html-to-text";
+//import Transport from "nodemailer-brevo-transport";
+// TODO - do I need above import statement?
 
-module.exports = class Email {
+export default class Email {
   constructor(user, url) {
     this.to = user.email;
     this.firstName = user.name.split(" ")[0];
@@ -65,4 +66,4 @@ module.exports = class Email {
       "Your Natours Password Reset Link (Valid for 10 minutes)"
     );
   }
-};
+}
