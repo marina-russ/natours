@@ -1,8 +1,8 @@
-const catchAsync = require("../utils/catchAsync");
-const AppError = require("../utils/appError");
-const APIFeatures = require("../utils/apiFeatures");
+import catchAsync from "../utils/catchAsync.js";
+import AppError from "../utils/appError.js";
+import APIFeatures from "../utils/apiFeatures.js";
 
-exports.createOne = (Model) =>
+export const createOne = (Model) =>
   catchAsync(async (req, res, next) => {
     const newDoc = await Model.create(req.body);
 
@@ -14,7 +14,7 @@ exports.createOne = (Model) =>
     });
   });
 
-exports.getOne = (Model, popOptions) =>
+export const getOne = (Model, popOptions) =>
   catchAsync(async (req, res, next) => {
     let query = Model.findById(req.params.id);
     if (popOptions) query = query.populate(popOptions);
@@ -32,7 +32,7 @@ exports.getOne = (Model, popOptions) =>
     });
   });
 
-exports.getAll = (Model) =>
+export const getAll = (Model) =>
   catchAsync(async (req, res, next) => {
     // Allows for nested GET reviews on tours (hack)
     let filter = {};
@@ -56,7 +56,7 @@ exports.getAll = (Model) =>
     });
   });
 
-exports.updateOne = (Model) =>
+export const updateOne = (Model) =>
   catchAsync(async (req, res, next) => {
     const doc = await Model.findByIdAndUpdate(req.params.id, req.body, {
       // properties we can set:
@@ -76,7 +76,7 @@ exports.updateOne = (Model) =>
     });
   });
 
-exports.deleteOne = (Model) =>
+export const deleteOne = (Model) =>
   catchAsync(async (req, res, next) => {
     const doc = await Model.findByIdAndDelete(req.params.id);
 
@@ -89,3 +89,5 @@ exports.deleteOne = (Model) =>
       data: null,
     });
   });
+
+//export default handlerFactory;

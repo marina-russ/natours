@@ -1,33 +1,33 @@
-const multer = require("multer");
-const sharp = require("sharp");
+import multer from "multer";
+import sharp from "sharp";
 
-const User = require("../models/userModel");
-const factory = require("./handlerFactory");
-const catchAsync = require("../utils/catchAsync");
-const AppError = require("../utils/appError");
+import User from "../models/userModel.js";
+import * as factory from "./handlerFactory.js";
+import catchAsync from "../utils/catchAsync.js";
+import AppError from "../utils/appError.js";
 
 // ==========================
 // === CRUD: ADMIN UPDATING
 // ==========================
 
-exports.createUser = (req, res) => {
+export const createUser = (req, res) => {
   // User creation is done in authController at .signup
   res.status(500).json({
     status: "error",
     message: "This route is not defined! Please use /signup instead.",
   });
 };
-exports.getUser = factory.getOne(User);
-exports.getAllUsers = factory.getAll(User);
-exports.updateUser = factory.updateOne(User);
+export const getUser = factory.getOne(User);
+export const getAllUsers = factory.getAll(User);
+export const updateUser = factory.updateOne(User);
 // ! Do NOT update passwords with .updateUser!
-exports.deleteUser = factory.deleteOne(User);
+export const deleteUser = factory.deleteOne(User);
 
 // ==========================
 // === CRUD: USER UPDATING
 // ==========================
 
-exports.getMe = (req, res, next) => {
+export const getMe = (req, res, next) => {
   req.params.id = req.user.id;
   next();
 };
@@ -40,7 +40,7 @@ const filterObj = (obj, ...allowedFields) => {
   return newObj;
 };
 
-exports.updateMe = catchAsync(async (req, res, next) => {
+export const updateMe = catchAsync(async (req, res, next) => {
   // 1 - Create error if user POSTs password data
   if (req.body.password || req.body.passwordConfirm) {
     return next(
@@ -70,7 +70,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.deleteMe = catchAsync(async (req, res, next) => {
+export const deleteMe = catchAsync(async (req, res, next) => {
   await User.findByIdAndUpdate(req.user.id, { activeAccount: false });
 
   res.status(204).json({
@@ -98,9 +98,9 @@ const upload = multer({
   fileFilter: multerFilter,
 });
 
-exports.uploadUserPhoto = upload.single("photo");
+export const uploadUserPhoto = upload.single("photo");
 
-exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
+export const resizeUserPhoto = catchAsync(async (req, res, next) => {
   if (!req.file) return next();
 
   req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`;
@@ -113,3 +113,5 @@ exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
 
   next();
 });
+
+//export default userController;

@@ -1,11 +1,11 @@
-const Stripe = require("stripe");
+import Stripe from "stripe";
 
-const Booking = require("../models/bookingModel");
-const Tour = require("../models/tourModel");
-const factory = require("./handlerFactory");
-const catchAsync = require("../utils/catchAsync");
+import Booking from "../models/bookingModel.js";
+import Tour from "../models/tourModel.js";
+import * as factory from "./handlerFactory.js";
+import catchAsync from "../utils/catchAsync.js";
 
-exports.getCheckoutSession = catchAsync(async (req, res, next) => {
+export const getCheckoutSession = catchAsync(async (req, res, next) => {
   // 1 - Get currently booked tour
   const tour = await Tour.findById(req.params.tourId);
 
@@ -48,7 +48,7 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.createBookingCheckout = catchAsync(async (req, res, next) => {
+export const createBookingCheckout = catchAsync(async (req, res, next) => {
   // TODO - Temporary code since this is unsecure! Only until app is deployed!
   const { tour, user, price } = req.query;
 
@@ -62,8 +62,10 @@ exports.createBookingCheckout = catchAsync(async (req, res, next) => {
 // CRUD REQUESTS
 // =======================
 
-exports.createBooking = factory.createOne(Booking);
-exports.getBooking = factory.getOne(Booking);
-exports.getAllBookings = factory.getAll(Booking);
-exports.updateBooking = factory.updateOne(Booking);
-exports.deleteBooking = factory.deleteOne(Booking);
+export const createBooking = factory.createOne(Booking);
+export const getBooking = factory.getOne(Booking);
+export const getAllBookings = factory.getAll(Booking);
+export const updateBooking = factory.updateOne(Booking);
+export const deleteBooking = factory.deleteOne(Booking);
+
+//export default bookingController;

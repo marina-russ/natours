@@ -1,11 +1,11 @@
-const crypto = require("crypto");
-const { promisify } = require("util");
-const jwt = require("jsonwebtoken");
+import crypto from "crypto";
+import { promisify } from "util";
+import jwt from "jsonwebtoken";
 
-const User = require("../models/userModel");
-const catchAsync = require("../utils/catchAsync");
-const AppError = require("../utils/appError");
-const Email = require("../utils/email");
+import User from "../models/userModel.js";
+import catchAsync from "../utils/catchAsync.js";
+import AppError from "../utils/appError.js";
+import Email from "../utils/email.js";
 
 // =======================
 // === JSON Web Token
@@ -45,7 +45,7 @@ const createSendToken = (user, statusCode, res) => {
 // === Authentication
 // =======================
 
-exports.signup = catchAsync(async (req, res, next) => {
+export const signup = catchAsync(async (req, res, next) => {
   const newUser = await User.create({
     name: req.body.name,
     email: req.body.email,
@@ -60,7 +60,7 @@ exports.signup = catchAsync(async (req, res, next) => {
   createSendToken(newUser, 201, res);
 });
 
-exports.login = catchAsync(async (req, res, next) => {
+export const login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
 
   // 1) Check if email and password exist
@@ -81,8 +81,8 @@ exports.login = catchAsync(async (req, res, next) => {
   //console.log(`🪵  ${user.name} is logged in!`);
 });
 
-// !BUG - Not working correctly
-exports.logout = (req, res) => {
+// TODO !BUG - Not working correctly
+export const logout = (req, res) => {
   res.clearCookie("jwt");
   res.status(200).json({ status: "success" });
 };
@@ -91,7 +91,7 @@ exports.logout = (req, res) => {
 // === Authorization
 // =======================
 
-exports.protect = catchAsync(async (req, res, next) => {
+export const protect = catchAsync(async (req, res, next) => {
   // 1 - Check for & get JWT
   let token;
   if (
@@ -135,7 +135,7 @@ exports.protect = catchAsync(async (req, res, next) => {
 });
 
 // Only for rendered pages, doesn't throw errors!
-exports.isLoggedIn = catchAsync(async (req, res, next) => {
+export const isLoggedIn = catchAsync(async (req, res, next) => {
   if (req.cookies.jwt) {
     // 1 - Verify JWT
     const decoded = await promisify(jwt.verify)(
@@ -158,7 +158,7 @@ exports.isLoggedIn = catchAsync(async (req, res, next) => {
   next();
 });
 
-exports.restrictTo = (...roles) => {
+export const restrictTo = (...roles) => {
   // ...roles = ["admin", "lead-guide"]
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
@@ -175,7 +175,7 @@ exports.restrictTo = (...roles) => {
 // === Passwords
 // =======================
 
-exports.forgotPassword = catchAsync(async (req, res, next) => {
+export const forgotPassword = catchAsync(async (req, res, next) => {
   // 1 - Get user based on POSTed email
   const user = await User.findOne({ email: req.body.email });
   if (!user) {
@@ -210,7 +210,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   }
 });
 
-exports.resetPassword = catchAsync(async (req, res, next) => {
+export const resetPassword = catchAsync(async (req, res, next) => {
   // 1 - Encrypt token for comparison
   const hashedToken = crypto
     .createHash("sha256")
@@ -241,7 +241,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   createSendToken(user, 200, res);
 });
 
-exports.updatePassword = catchAsync(async (req, res, next) => {
+export const updatePassword = catchAsync(async (req, res, next) => {
   // 1 - Get user from collection
   const user = await User.findById(req.user.id).select("+password");
 
@@ -258,3 +258,5 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   // 4 - Log user in with new password, send JWT
   createSendToken(user, 200, res);
 });
+
+//export default authController;

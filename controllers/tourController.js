@@ -1,20 +1,20 @@
-const multer = require("multer");
-const sharp = require("sharp");
+import multer from "multer";
+import sharp from "sharp";
 
-const Tour = require("../models/tourModel");
-const factory = require("./handlerFactory");
-const catchAsync = require("../utils/catchAsync");
-const AppError = require("../utils/appError");
+import Tour from "../models/tourModel.js";
+import * as factory from "./handlerFactory.js";
+import catchAsync from "../utils/catchAsync.js";
+import AppError from "../utils/appError.js";
 
 // =======================
 // === CRUD REQUESTS
 // =======================
 
-exports.createTour = factory.createOne(Tour);
-exports.getTour = factory.getOne(Tour, { path: "reviews" });
-exports.getAllTours = factory.getAll(Tour);
-exports.updateTour = factory.updateOne(Tour);
-exports.deleteTour = factory.deleteOne(Tour);
+export const createTour = factory.createOne(Tour);
+export const getTour = factory.getOne(Tour, { path: "reviews" });
+export const getAllTours = factory.getAll(Tour);
+export const updateTour = factory.updateOne(Tour);
+export const deleteTour = factory.deleteOne(Tour);
 
 // ==========================
 // === IMAGE MIDDLEWARE
@@ -35,12 +35,12 @@ const upload = multer({
   fileFilter: multerFilter,
 });
 
-exports.uploadTourImages = upload.fields([
+export const uploadTourImages = upload.fields([
   { name: "imageCover", maxCount: 1 },
   { name: "images", maxCount: 3 },
 ]);
 
-exports.resizeTourImages = catchAsync(async (req, res, next) => {
+export const resizeTourImages = catchAsync(async (req, res, next) => {
   if (!req.files.imageCover || !req.files.images) return next();
 
   // 1 - Process Cover Image
@@ -76,7 +76,7 @@ exports.resizeTourImages = catchAsync(async (req, res, next) => {
 // === GEOSPATIAL MIDDLEWARE
 // ==========================
 
-exports.getToursWithin = catchAsync(async (req, res, next) => {
+export const getToursWithin = catchAsync(async (req, res, next) => {
   const { distance, latlong, unit } = req.params;
   const [lat, long] = latlong.split(",");
 
@@ -104,7 +104,7 @@ exports.getToursWithin = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getDistances = catchAsync(async (req, res, next) => {
+export const getDistances = catchAsync(async (req, res, next) => {
   const { latlong, unit } = req.params;
   const [lat, long] = latlong.split(",");
 
@@ -150,14 +150,14 @@ exports.getDistances = catchAsync(async (req, res, next) => {
 // === OTHER MIDDLEWARE
 // =======================
 
-exports.aliasTopTours = (req, res, next) => {
+export const aliasTopTours = (req, res, next) => {
   req.query.limit = "5";
   req.query.sort = "-ratingsAverage,price";
   req.query.fields = "name,price,ratingsAverage,summary,difficulty";
   next();
 };
 
-exports.getTourStats = catchAsync(async (req, res, next) => {
+export const getTourStats = catchAsync(async (req, res, next) => {
   const tourStats = await Tour.aggregate([
     {
       $match: { ratingsAverage: { $gte: 4.5 } },
@@ -186,7 +186,7 @@ exports.getTourStats = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getMonthlyPlan = catchAsync(async (req, res, next) => {
+export const getMonthlyPlan = catchAsync(async (req, res, next) => {
   const year = req.params.year * 1;
 
   const plan = await Tour.aggregate([
@@ -229,4 +229,4 @@ exports.getMonthlyPlan = catchAsync(async (req, res, next) => {
   });
 });
 
-
+//export default tourController;

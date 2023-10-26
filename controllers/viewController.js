@@ -1,14 +1,14 @@
-const Tour = require("../models/tourModel");
-const User = require("../models/userModel");
-const Booking = require("../models/bookingModel");
-const catchAsync = require("../utils/catchAsync");
-const AppError = require("../utils/appError");
+import Tour from "../models/tourModel.js";
+import User from "../models/userModel.js";
+import Booking from "../models/bookingModel.js";
+import catchAsync from "../utils/catchAsync.js";
+import AppError from "../utils/appError.js";
 
 // =======================
 // === VIEW REQUESTS
 // =======================
 
-exports.getOverview = catchAsync(async (req, res, next) => {
+export const getOverview = catchAsync(async (req, res, next) => {
   const tours = await Tour.find();
 
   res.status(200).render("overview", {
@@ -17,7 +17,7 @@ exports.getOverview = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getTour = catchAsync(async (req, res, next) => {
+export const getTour = catchAsync(async (req, res, next) => {
   const tour = await Tour.findOne({ slug: req.params.slug }).populate({
     path: "reviews",
     fields: "reviewText rating user",
@@ -33,25 +33,25 @@ exports.getTour = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getSignupForm = (req, res) => {
+export const getSignupForm = (req, res) => {
   res.status(200).render("signup", {
     title: "Create an account",
   });
 };
 
-exports.getLoginForm = (req, res) => {
+export const getLoginForm = (req, res) => {
   res.status(200).render("login", {
     title: "Login to your account",
   });
 };
 
-exports.getMyAccount = (req, res) => {
+export const getMyAccount = (req, res) => {
   res.status(200).render("account", {
     title: "My Account",
   });
 };
 
-exports.getMyTours = catchAsync(async (req, res, next) => {
+export const getMyTours = catchAsync(async (req, res, next) => {
   // 1 - Find all bookings made by user
   const bookings = await Booking.find({ user: req.user.id });
 
@@ -66,7 +66,7 @@ exports.getMyTours = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.updateUserData = catchAsync(async (req, res, next) => {
+export const updateUserData = catchAsync(async (req, res, next) => {
   const updatedUser = await User.findByIdAndUpdate(
     req.user.id,
     {
@@ -83,3 +83,5 @@ exports.updateUserData = catchAsync(async (req, res, next) => {
     user: updatedUser,
   });
 });
+
+//export default viewController;
