@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 import axios from 'axios';
-import { showAlert } from './alert';
+import { showAlert } from './alert.js';
 
 export const updateMySettings = async (data, type) => {
   try {

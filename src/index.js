@@ -1,9 +1,9 @@
 /* eslint-disable */
 
-import { displayMap } from "./leaflet";
-import { login, logout } from "./login";
-import { updateMySettings } from "./user";
-import { bookTour } from "./stripe";
+import { displayMap } from "./js/leaflet.js";
+import { login, logout } from "./js/login.js";
+import { updateMySettings } from "./js/user.js";
+import { bookTour } from "./js/stripe.js";
 
 // *** DOM ELEMENTS
 // *** =======================

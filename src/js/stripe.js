@@ -1,6 +1,6 @@
 /* eslint-disable */
 import axios from 'axios';
-import { showAlert } from "./alert";
+import { showAlert } from "./alert.js";
 
 export const bookTour = async tourId => {
   // Stripe Public API Key
