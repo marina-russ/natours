@@ -9,6 +9,7 @@ npm-debug.log
 # bundling
 build
 public/js/bundle.js
+src/js/bundle.js
 .cache/
 
 # CODE NOTES
