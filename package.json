@@ -1,14 +1,16 @@
 {
   "name": "natours",
   "version": "1.0.0",
+  "type": "module",
   "description": "app that uses node, express, and mongoDB",
   "main": "app.js",
   "scripts": {
     "start": "nodemon server.js",
     "start:prod": "SET NODE_ENV=production&& nodemon server.js",
     "debug": "ndb server.js",
-    "watch:js": "esbuild ./public/js/index.js --bundle --outfile=./public/js/bundle.js --watch",
-    "build": "esbuild ./public/js/index.js --bundle --outfile=./public/js/bundle.js"
+    "watch": "webpack serve",
+    "build": "webpack",
+    "stats": "STATS=server npm run build"
   },
   "repository": {
     "type": "git",
@@ -45,6 +47,7 @@
     "sharp": "^0.32.6",
     "slugify": "^1.6.6",
     "stripe": "^13.8.0",
+    "url": "^0.11.3",
     "validator": "^13.9.0",
     "xss-clean": "^0.1.4"
   },
@@ -59,7 +62,22 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.32.2",
     "ndb": "^1.1.5",
-    "prettier": "^2.8.8"
+    "prettier": "^2.8.8",
+    "webpack": "^5.89.0",
+    "webpack-bundle-analyzer": "^4.9.1",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1"
+  },
+  "plugins": [
+    "import"
+  ],
+  "rules": {
+    "import/no-unresolved": 2,
+    "import/no-commonjs": 2,
+    "import/extensions": [
+      2,
+      "ignorePackages"
+    ]
   },
   "engines": {
     "node": ">=10.0.0"
