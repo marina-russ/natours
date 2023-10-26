@@ -1,9 +1,9 @@
-const fs = require("fs");
-const mongoose = require("mongoose");
-const dotenv = require("dotenv");
-const Tour = require("../../models/tourModel");
-const User = require("../../models/userModel");
-const Review = require("../../models/reviewModel");
+import fs from "fs";
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+import Tour from "./../models/tourModel.js";
+import User from "./../models/userModel.js";
+import Review from "./../models/reviewModel.js";
 
 dotenv.config({ path: "./config.env" });
 
