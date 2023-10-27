@@ -1,5 +1,9 @@
 {
   "extends": ["airbnb", "prettier", "plugin:node/recommended"],
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
   "plugins": ["prettier"],
   "rules": {
     "prettier/prettier": [
@@ -9,22 +13,22 @@
       }
     ],
     "arrow-body-style": "off",
-    "spaced-comment": "off",
-    "no-console": "off",
+    "class-methods-use-this": "off",
     "consistent-return": "off",
+    "endOfLine": 0, // 0 = off, 1 = warn, 2 = error
     "func-names": "off",
-    "object-shorthand": "off",
-    "no-process-exit": "off",
-    "endOfLine": 0,
-    // 0 = off, 1 = warn, 2 = error
+    "no-console": "off",
     "no-param-reassign": "off",
+    "no-process-exit": "off",
     "no-return-await": "off",
     "no-underscore-dangle": "off",
-    "class-methods-use-this": "off",
+    "no-unused-vars": ["error", { "argsIgnorePattern": "req|res|next|val" }],
+    "node/no-unpublished-import": [
+      "error",
+      { "allowModules": ["webpack-bundle-analyzer"] }
+    ],
+    "object-shorthand": "off",
     "prefer-destructuring": ["error", { "object": true, "array": false }],
-    "no-unused-vars": ["error", { "argsIgnorePattern": "req|res|next|val" }]
-  },
-  "parserOptions": {
-    "sourceType": "module"
+    "spaced-comment": "off"
   }
 }
