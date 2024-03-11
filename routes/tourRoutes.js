@@ -2,7 +2,7 @@ import express from "express";
 
 import * as tourController from "../controllers/tourController.js";
 import * as authController from "../controllers/authController.js";
-import * as reviewRouter from "./reviewRoutes.js";
+import reviewRoutes from "./reviewRoutes.js";
 
 const router = express.Router();
 
@@ -39,16 +39,17 @@ router
 // OTHER ROUTES
 // =======================
 
+// Nested Routes
+// TODO lacks a middleware?
+// mergeParam
+router.use("/:tourId/reviews", reviewRoutes);
+
 // Geospatial Routes
 router
   .route("/tours-within/:distance/center/:latlong/unit/:unit")
   .get(tourController.getToursWithin);
 
 router.route("/distances/:latlong/unit/:unit").get(tourController.getDistances);
-
-// Nested Routes
-// TODO lacks a middleware?
-router.use("/:tourId/reviews", reviewRouter);
 
 // Alias Routes
 router
@@ -67,4 +68,4 @@ router
 // =======================
 // EXPORTS
 
-//export default router;
+export default router;
