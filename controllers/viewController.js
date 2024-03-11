@@ -83,5 +83,3 @@ export const updateUserData = catchAsync(async (req, res, next) => {
     user: updatedUser,
   });
 });
-
-//export default viewController;

@@ -30,5 +30,3 @@ export const getReview = factory.getOne(Review);
 export const getAllReviews = factory.getAll(Review);
 export const updateReview = factory.updateOne(Review);
 export const deleteReview = factory.deleteOne(Review);
-
-//export default reviewController;

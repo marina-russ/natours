@@ -89,5 +89,3 @@ export const deleteOne = (Model) =>
       data: null,
     });
   });
-
-//export default handlerFactory;

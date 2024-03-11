@@ -258,5 +258,3 @@ export const updatePassword = catchAsync(async (req, res, next) => {
   // 4 - Log user in with new password, send JWT
   createSendToken(user, 200, res);
 });
-
-//export default authController;

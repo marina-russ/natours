@@ -67,5 +67,3 @@ export const getBooking = factory.getOne(Booking);
 export const getAllBookings = factory.getAll(Booking);
 export const updateBooking = factory.updateOne(Booking);
 export const deleteBooking = factory.deleteOne(Booking);
-
-//export default bookingController;

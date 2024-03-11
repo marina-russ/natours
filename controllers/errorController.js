@@ -69,7 +69,7 @@ const sendErrorProd = (err, req, res) => {
   });
 };
 
-export const errorHandler = (err, req, res, next) => {
+const errorHandler = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
   err.status = err.status || "error";
 
@@ -90,4 +90,4 @@ export const errorHandler = (err, req, res, next) => {
   }
 };
 
-//export default globalErrorHandler;
+export default errorHandler;

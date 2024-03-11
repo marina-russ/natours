@@ -113,5 +113,3 @@ export const resizeUserPhoto = catchAsync(async (req, res, next) => {
 
   next();
 });
-
-//export default userController;

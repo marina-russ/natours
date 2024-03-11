@@ -228,5 +228,3 @@ export const getMonthlyPlan = catchAsync(async (req, res, next) => {
     },
   });
 });
-
-//export default tourController;
