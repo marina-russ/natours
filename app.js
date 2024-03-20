@@ -3,7 +3,6 @@ import express from "express";
 import morgan from "morgan";
 import { fileURLToPath } from "url";
 import rateLimit from "express-rate-limit";
-//import helmet from "helmet";
 import contentSecurityPolicy from "helmet-csp";
 import mongoSanitize from "express-mongo-sanitize";
 import xss from "xss-clean";
@@ -11,8 +10,8 @@ import hpp from "hpp";
 import cookieParser from "cookie-parser";
 import compression from "compression";
 
-//import AppError from "/utils/appError.js";
-import * as globalErrorHandler from "./controllers/errorController.js";
+import AppError from "./utils/appError.js";
+import globalErrorHandler from "./controllers/errorController.js";
 import * as tourRouter from "./routes/tourRoutes.js";
 import * as userRouter from "./routes/userRoutes.js";
 import * as reviewRouter from "./routes/reviewRoutes.js";
