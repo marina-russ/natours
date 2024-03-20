@@ -1,10 +1,8 @@
 import nodemailer from "nodemailer";
 import pug from "pug";
-//import htmlToText from "html-to-text";
-//import Transport from "nodemailer-brevo-transport";
-// TODO - do I need above import statement?
+import htmlToText from "html-to-text";
 
-export default class Email {
+class Email {
   constructor(user, url) {
     this.to = user.email;
     this.firstName = user.name.split(" ")[0];
@@ -67,3 +65,5 @@ export default class Email {
     );
   }
 }
+
+export default Email;
