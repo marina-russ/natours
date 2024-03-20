@@ -7,6 +7,10 @@ npm-debug.log
 *.env
 
 # bundling
+dist
+index.bundle.js
+index.html
+
 build
 public/js/bundle.js
 src/js/bundle.js
@@ -14,3 +18,4 @@ src/js/bundle.js
 
 # CODE NOTES
 refactor-code.md
+z-webpack ref/
